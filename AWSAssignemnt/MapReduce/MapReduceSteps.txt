@@ -1,0 +1,53 @@
+CREATE EXTERNAL TABLE if not exists DelayFlight(
+Year int, 
+Month int, 
+DayofMonth int, 
+DayOfWeek int, 
+DepTime int, 
+CRSDepTime int, 
+ArrTime int, 
+CRSArrTime int, 
+UniqueCarrier string, 
+FlightNum int, 
+TailNum string, 
+ActualElapsedTime int, 
+CRSElapsedTime int, 
+AirTime int, 
+ArrDelay int, 
+DepDelay int, 
+Origin string, 
+Dest string, 
+Distance int, 
+TaxiIn int, 
+TaxiOut int, 
+Cancelled int, 
+CancellationCode string, 
+Diverted string, 
+CarrierDelay int, 
+WeatherDelay int, 
+NASDelay int, 
+SecurityDelay int, 
+LateAircraftDelay int
+)
+row format delimited fields terminated by ','
+TBLPROPERTIES("skip.header.line.count"="1");
+
+describe airlines;
+Load data INPATH 's3://awsssignment/DelayedFlights-updated.csv' OVERWRITE INTO TABLE  DelayFlight
+
+
+Year wise carrier delay from 2003-2010
+SELECT Year, avg((CarrierDelay /ArrDelay)*100) from default.delayFlight GROUP BY Year;
+
+Year wise NAS delay from 2003-2010
+SELECT Year, avg((NASDelay /ArrDelay)*100) from default.delayFlight GROUP BY Year;
+
+Year wise Weather delay from 2003-2010
+SELECT Year, avg((WeatherDelay /ArrDelay)*100) from default.delayFlight GROUP BY Year;
+
+Year wise late aircraft delay from 2003-2010
+SELECT Year, avg((LateAircraftDelay /ArrDelay)*100) from default.delayFlight GROUP BY Year;
+
+Year wise security delay from 2003-2010
+SELECT Year, avg((SecurityDelay /ArrDelay)*100) from default.delayFlight GROUP BY Year;
+
